@@ -6,12 +6,12 @@ from sensitive_info import *
 import sys
 
 # Puts all courses into a list
-def make_courses():
+def make_courses(crn_list):
     all_courses_list = []
     with requests.Session() as session:
         session.headers.update({'user-agent': USER_AGENT})
         # Creates couses
-        for crn in CRNS:
+        for crn in crn_list:
             num_tries = 0
             while num_tries < 3:
                 try:
@@ -60,5 +60,13 @@ def loop_check_courses(courses, sleep_time_between_courses: int = 1, sleep_time_
         time.sleep(sleep_time_between_each_ping)
 
 
-courses = make_courses()
-loop_check_courses(courses)
+# CRNS variable imported from sensitive_info.py
+courses = make_courses(CRNS)
+# Sleep times in seconds
+sleep_time_between_courses = 1
+sleep_time_between_each_ping = 5
+sleep_time_between_error = 30
+loop_check_courses(courses,
+                   sleep_time_between_courses,
+                   sleep_time_between_each_ping,
+                   sleep_time_between_error)
