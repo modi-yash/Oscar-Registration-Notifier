@@ -6,7 +6,8 @@ from sensitive_info import *
 import sys
 
 # Puts all courses into a list
-def make_courses(crn_list, sleep_time_between_course_initialization: float = 1.0):
+def make_courses(crn_list, sleep_time_between_course_initialization: float = 1.0, debug: bool = False):
+    if debug: print("[Seats capacity, Seats taken, Seats available, Waitlist capacity, Waitlist taken, Waitlist remaining")
     all_courses_list = []
     with requests.Session() as session:
         session.headers.update({'user-agent': USER_AGENT})
@@ -17,7 +18,8 @@ def make_courses(crn_list, sleep_time_between_course_initialization: float = 1.0
                 try:
                     course = Course(crn, session)
                     all_courses_list.append(course)
-                    print(course.registration_info)
+                    # Prints all seats
+                    if debug: print(course.registration_info)
                     break  # Success, exit retry loop
                 except (requests.exceptions.ConnectionError, requests.exceptions.Timeout) as e:
                     num_tries += 1
@@ -36,16 +38,16 @@ def make_courses(crn_list, sleep_time_between_course_initialization: float = 1.0
 def loop_check_courses(courses,
                        sleep_time_between_courses: float = 1.0,
                        sleep_time_between_each_ping: float = 5.0,
-                       sleep_time_between_error: float = 30.0):
+                       sleep_time_between_error: float = 30.0,
+                       debug: bool = False):
     while(True):
         try:
             for course in courses:
                 # Checks if the open registration seats have increased and hasn't already notified
-                old_num_registered = course.num_registered
-                course.update_num_registered()
-                if(old_num_registered!=course.num_registered # Registration slot has opened
-                and course.registration_info[0]!=course.registration_info[1] # Registration is not max
-                and course.num_registered!=-404 # Not first time checking
+                old_num_available = course.num_available
+                course.update_num_available()
+                if(old_num_available!=course.num_available # Registration slot has opened
+                and course.num_available!=-404 # Not first time checking
                 and not course.has_notified):
                         # Posts message to api
                         r = requests.post("https://api.pushover.net/1/messages.json", data = {
@@ -60,13 +62,18 @@ def loop_check_courses(courses,
                 time.sleep(sleep_time_between_courses)
             time.sleep(sleep_time_between_each_ping)
         except KeyboardInterrupt as e:
+            # Exiting the program
+            print("[Seats capacity, Seats taken, Seats available, Waitlist capacity, Waitlist taken, Waitlist remaining")
+            if debug: print("[Seats capacity, Seats taken, Seats available, Waitlist capacity, Waitlist taken, Waitlist remaining")
             for course in courses:
                 print(course.registration_info)
             raise KeyboardInterrupt()
         except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
+            # Internet connection or timeout error
             log(f"Connection timed out. Please check your internet connection.")
             time.sleep(sleep_time_between_error)
         except Exception as e:
+            # Other errors
             log("Fatal error occurred:", e)
             sys.exit(1)
         
@@ -75,7 +82,8 @@ def loop_check_courses(courses,
 # CRNS variable imported from sensitive_info.py
 sleep_time_between_course_initialization = 1.0 # Must be float value, "*.***"
 courses = make_courses(CRNS,
-                       sleep_time_between_course_initialization)
+                       sleep_time_between_course_initialization,
+                       debug=True)
 # Sleep times in seconds (same as above, must be floats)
 sleep_time_between_courses = 1.0
 sleep_time_between_each_ping = 5.0
@@ -83,4 +91,5 @@ sleep_time_between_error = 30.0
 loop_check_courses(courses,
                    sleep_time_between_courses,
                    sleep_time_between_each_ping,
-                   sleep_time_between_error)
+                   sleep_time_between_error,
+                   debug=True)

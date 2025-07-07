@@ -18,7 +18,7 @@ class Course:
         self.course_number = ""
         self.course_section = ""
         self.url = f"https://oscar.gatech.edu/pls/bprod/bwckschd.p_disp_detail_sched?term_in=202508&crn_in={self.course_crn}"
-        self.num_registered = -404 # will change in update_num_registered call in fetch_course_data
+        self.num_available = -404 # will change in update_num_available call in fetch_course_data
         self.registration_info = [] # same as above variable
         # Fetch course data when the object is created
         self.fetch_course_data()
@@ -31,7 +31,7 @@ class Course:
             # If the request was successful, parse the HTML content
             if response.status_code == 200:
                 html = response.content
-                self.update_num_registered(html)
+                self.update_num_available(html)
                 soup = BeautifulSoup(html, 'html.parser')
                 course_information = soup.find(class_='ddlabel', scope="row")
                 if course_information:
@@ -59,7 +59,7 @@ class Course:
         except requests.exceptions.RequestException as e:
             log("An error occurred while making the request:", e)
 
-    def update_num_registered(self, html=None) -> int:
+    def update_num_available(self, html=None) -> int:
         try:
             # Finds html code if it is not inputted
             if html is None:
@@ -79,8 +79,8 @@ class Course:
             if isinstance(table, Tag):
                 # Finally found the numbers and puts them into an instance variable
                 self.registration_info = list(map(lambda item: item.get_text(), (table.find_all('td', class_='dddefault'))))
-                self.num_registered = self.registration_info[1]
-                return self.num_registered
+                self.num_available = self.registration_info[2]
+                return self.num_available
             else:
                 log("Could not find the seating numbers table.")
             return -1
