@@ -5,6 +5,7 @@ from Course import *
 from sensitive_info import *
 import sys
 
+# Puts all courses into a list
 def make_courses():
     all_courses_list = []
     with requests.Session() as session:

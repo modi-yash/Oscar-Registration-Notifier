@@ -6,7 +6,7 @@ def log(*text):
     if not os.path.isdir("./logs"):
         os.mkdir("logs")
     with open(f"./logs/{datetime.datetime.now().strftime("%d-%m-%y")}_log.txt", 'a') as f:
-        message = f"{datetime.datetime.now()} - {text}\n"
+        message = f"{datetime.datetime.now().strftime("%d-%m-%y %I:%M:%S")} - {text}\n"
         f.write(message)
         print(message)
         return message
