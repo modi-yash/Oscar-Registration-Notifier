@@ -44,14 +44,14 @@ while(True):
                     "message": f"Registration for {course.course_title} has changed and IS NOT full."
                     })
                     course.has_notified = True
-                    print(log(f"Notification provided: \"Registration for {course.course_title} has changed and IS NOT full.\""))
+                    log(f"Notification provided: \"Registration for {course.course_title} has changed and IS NOT full.\"")
                     # Ends the process (for now)
                     raise Exception("It works.")
             time.sleep(1)
     except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
-        print(log(f"Connection timed out. Please check your internet connection."))
+        log(f"Connection timed out. Please check your internet connection.")
         time.sleep(30)
     except Exception as e:
-        print(log("Fatal error occurred:", e))
+        log("Fatal error occurred:", e)
         sys.exit(1)
     time.sleep(5)

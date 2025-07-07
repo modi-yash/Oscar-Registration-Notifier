@@ -1,11 +1,13 @@
 # Requirements
-On Pushover (https://pushover.net):
-    an API Token,
-    and a User Key.
+You will need:
 
-Python installed, 3.13 is what this is based on.
+    On Pushover (https://pushover.net):
+        an API Token,
+        and a User Key.
 
-CRNS of your courses that you want to take. These can be found on Oscar.
+    Python installed, 3.13 is what this is based on.
+
+    CRNS of your courses that you want to take. These can be found on Oscar.
 
 # Directions
 These will go into the sensitive_info.py file, formatted like "example_sensitive_info.py"
