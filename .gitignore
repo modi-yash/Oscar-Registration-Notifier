@@ -1,6 +1,8 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
+
+# Log files
 logs/*_log.txt
 !logs/example_log.txt
 
