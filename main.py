@@ -1,6 +1,6 @@
 from oscar_scraper import *
 
-debug_mode = True
+debug_mode = False
 # CRNS variable imported from sensitive_info.py
 sleep_time_between_course_initialization = 1.0 # Must be float value, "*.***"
 courses = make_courses(CRNS,

@@ -20,4 +20,4 @@ In your terminal, type "python -m  pip", and press enter. This will install pip,
 
 If you want to use a virtual environment, you can also use that to install the libraries. If you do not know what that is, you can safely ignore this.
 
-After all this is done, go into your terminal and, in the directory which the "oscar_scraper.py" file is in, type "python oscar_scraper.py" in the terminal and press enter. This will activate the application. If you wish to exit the scraper, press Control + C.
+After all this is done, go into your terminal and, in the directory which the "main.py" file is in, type "python main.py" in the terminal and press enter. This will activate the application. If you wish to exit the scraper, press Control + C.
