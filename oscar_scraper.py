@@ -56,7 +56,7 @@ def loop_check_courses(courses,
                         "message": f"Registration for {course.course_title} has changed and IS NOT full."
                         })
                         course.has_notified = True
-                        log(f"Notification provided: \"Registration for {course.course_title} has changed and IS NOT full.\"")
+                        log(f"Notification provided: \"Registration for {course.course_title} has changed and IS NOT full.\" From {old_num_available} available to {course.num_available}")
                 time.sleep(sleep_time_between_courses)
             time.sleep(sleep_time_between_each_ping)
         except KeyboardInterrupt as e:
