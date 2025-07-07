@@ -15,7 +15,9 @@ def make_courses(crn_list, sleep_time_between_course_initialization: float = 1.0
             num_tries = 0
             while num_tries < 3:
                 try:
-                    all_courses_list.append(Course(crn, session))
+                    course = Course(crn, session)
+                    all_courses_list.append(course)
+                    print(course.registration_info)
                     break  # Success, exit retry loop
                 except (requests.exceptions.ConnectionError, requests.exceptions.Timeout) as e:
                     num_tries += 1
@@ -27,7 +29,7 @@ def make_courses(crn_list, sleep_time_between_course_initialization: float = 1.0
                 except Exception as e:
                     log(f"Error fetching data for CRN {crn}: {e}")
                     break
-            time.sleep(1)  # Sleep for 1 second to avoid overwhelming the server
+            time.sleep(sleep_time_between_course_initialization)  # Sleep for 1 second to avoid overwhelming the server
         log("Finished fetching data for all CRNs. Starting looping.")
         return all_courses_list
 
@@ -41,7 +43,7 @@ def loop_check_courses(courses,
                 # Checks if the open registration seats have increased and hasn't already notified
                 old_num_registered = course.num_registered
                 course.update_num_registered()
-                if(old_num_registered>course.num_registered # Registration slot has opened
+                if(old_num_registered!=course.num_registered # Registration slot has opened
                 and course.registration_info[0]!=course.registration_info[1] # Registration is not max
                 and course.num_registered!=-404 # Not first time checking
                 and not course.has_notified):
@@ -56,17 +58,22 @@ def loop_check_courses(courses,
                         # Ends the process (for now)
                         raise Exception("It works.")
                 time.sleep(sleep_time_between_courses)
+            time.sleep(sleep_time_between_each_ping)
+        except KeyboardInterrupt as e:
+            for course in courses:
+                print(course.__str__(), course.registration_info)
+            raise KeyboardInterrupt()
         except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
             log(f"Connection timed out. Please check your internet connection.")
             time.sleep(sleep_time_between_error)
         except Exception as e:
             log("Fatal error occurred:", e)
             sys.exit(1)
-        time.sleep(sleep_time_between_each_ping)
+        
 
 
 # CRNS variable imported from sensitive_info.py
-sleep_time_between_course_initialization = 0.5 # Must be float value, "*.***"
+sleep_time_between_course_initialization = 0.1 # Must be float value, "*.***"
 courses = make_courses(CRNS,
                        sleep_time_between_course_initialization)
 # Sleep times in seconds (same as above, must be floats)
