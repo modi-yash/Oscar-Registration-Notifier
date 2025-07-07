@@ -46,7 +46,7 @@ def loop_check_courses(courses,
                 # Checks if the open registration seats have increased and hasn't already notified
                 old_num_available = course.num_available
                 course.update_num_available()
-                if(old_num_available!=course.num_available # Registration slot has opened
+                if(old_num_available<course.num_available # Registration slot has opened
                 and course.num_available!=-404 # Not first time checking
                 and not course.has_notified):
                         # Posts message to api
