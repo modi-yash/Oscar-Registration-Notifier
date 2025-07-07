@@ -5,9 +5,9 @@ You will need:
         an API Token,
         and a User Key.
 
-    Python installed, 3.13 is what this is based on.
+    Python installed, 3.13 is what this code is based on.
 
-    CRNS of your courses that you want to take. These can be found on Oscar.
+    CRNS of your courses that you want to take. These can be found on OSCAR.
 
 # Directions
 These will go into the sensitive_info.py file, formatted like "example_sensitive_info.py"
@@ -16,7 +16,8 @@ You will need a USER-AGENT, this can be any random string, but it is preferred t
 
 Put your CRNS into the "sensitive_info.py" file.
 
-In your terminal, type "python -m  pip", and press enter. This will install pip, the Python installer. Then type "pip install -r requirements.txt", and press enter. This will install all the libraries you will need.
+In your terminal, type "python -m  pip", and press enter. This will install pip, the Python installer.
+Then type "pip install -r requirements.txt", and press enter. This will install all the libraries you will need.
 
 If you want to use a virtual environment, you can also use that to install the libraries. If you do not know what that is, you can safely ignore this.
 
