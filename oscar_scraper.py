@@ -61,7 +61,7 @@ def loop_check_courses(courses,
             time.sleep(sleep_time_between_each_ping)
         except KeyboardInterrupt as e:
             for course in courses:
-                print(course.__str__(), course.registration_info)
+                print(course.registration_info)
             raise KeyboardInterrupt()
         except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
             log(f"Connection timed out. Please check your internet connection.")
@@ -73,7 +73,7 @@ def loop_check_courses(courses,
 
 
 # CRNS variable imported from sensitive_info.py
-sleep_time_between_course_initialization = 0.1 # Must be float value, "*.***"
+sleep_time_between_course_initialization = 1.0 # Must be float value, "*.***"
 courses = make_courses(CRNS,
                        sleep_time_between_course_initialization)
 # Sleep times in seconds (same as above, must be floats)
