@@ -36,8 +36,10 @@ with requests.Session() as session:
 while(True):
     for course in courses:
         # Checks if the open registration seats have increased and hasn't already notified
-        if(course.num_registered<course.update_num_registered() and course.registration_info[0]!=course.registration_info[1]
-            and course.num_registered!=-404 and not course.has_notified):
+        if(course.num_registered<course.update_num_registered()
+           and course.registration_info[0]!=course.registration_info[1]
+           and course.num_registered!=-404
+           and not course.has_notified):
                 # Posts message to api
                 r = requests.post("https://api.pushover.net/1/messages.json", data = {
                 "token": API_KEY,
