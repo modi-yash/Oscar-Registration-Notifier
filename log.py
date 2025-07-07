@@ -1,0 +1,9 @@
+import datetime
+import os
+
+def log(*text):
+    text = ' '.join(text)
+    if not os.path.isdir("./logs"):
+        os.mkdir("logs")
+    with open(f"./logs/{datetime.datetime.now().strftime("%d-%m-%y")}_log.txt", 'a') as f:
+        f.write(f"{datetime.datetime.now()} - {text}\n")

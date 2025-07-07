@@ -1,5 +1,5 @@
 from sensitive_info import *
-
+from log import log
 import requests
 from bs4 import BeautifulSoup, Tag # type: ignore
 from typing import Optional
@@ -42,20 +42,20 @@ class Course:
                         self.course_department, self.course_number = course_information[2].split(" ")
                         self.course_section = course_information[3]
                     else:
-                        print("Course not found.")
+                        log("Course not found.")
             # Response not found
             elif response.status_code == 404:
-                print("Page not found (404). Please check the URL.")
+                log("Page not found (404). Please check the URL.")
             # Other response errors
             else:
-                print(f"Failed to retrieve the page. Status code: {response.status_code}")
+                log(f"Failed to retrieve the page. Status code: {response.status_code}")
         # Error handling for connection issues
         except requests.exceptions.ConnectionError as e:
             print("Connection error. Please check your internet connection,", e)
         except requests.exceptions.Timeout as e:
-            print("Connection timed out. Please check your internet connection,", e)
+            log("Connection timed out. Please check your internet connection,", e)
         except requests.exceptions.RequestException as e:
-            print("An error occurred while making the request:", e)
+            log("An error occurred while making the request:", e)
 
     def update_nums_registered(self, html=None) -> int:
         try:
@@ -66,10 +66,10 @@ class Course:
                     html = response.content
                 # Error handling for response
                 elif response.status_code == 404:
-                    print("Page not found (404). Please check the URL.")
+                    log("Page not found (404). Please check the URL.")
                     return -2
                 else:
-                    print(f"Failed to retrieve the page. Status code: {response.status_code}")
+                    log(f"Failed to retrieve the page. Status code: {response.status_code}")
                     return -2
             soup = BeautifulSoup(html, 'html.parser')
             # Example: Find the number of registered students (update selector as needed)
@@ -78,19 +78,19 @@ class Course:
                 self.nums_registered = list(map(lambda item: item.get_text(), (table.find_all('td', class_='dddefault'))))
                 return self.nums_registered[1]
             else:
-                print("Could not find the seating numbers table.")
+                log("Could not find the seating numbers table.")
             return -1
         except requests.exceptions.ConnectionError as e:
-            print("Connection error. Please check your internet connection,", e)
+            log("Connection error. Please check your internet connection,", e)
             return -1
         except requests.exceptions.Timeout as e:
-            print("Connection timed out. Please check your internet connection,", e)
+            log("Connection timed out. Please check your internet connection,", e)
             return -1
         except requests.exceptions.RequestException as e:
-            print("An error occurred while making the request:", e)
+            log("An error occurred while making the request:", e)
             return -1
         except Exception as e:
-            print("An error occurred while parsing the HTML:", e)
+            log("An error occurred while parsing the HTML:", e)
             return -1
 
     def __repr__(self):
