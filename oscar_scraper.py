@@ -63,10 +63,10 @@ def loop_check_courses(courses,
             time.sleep(sleep_time_between_each_ping)
         except KeyboardInterrupt as e:
             # Exiting the program
-            print("[Seats capacity, Seats taken, Seats available, Waitlist capacity, Waitlist taken, Waitlist remaining")
-            if debug: print("[Seats capacity, Seats taken, Seats available, Waitlist capacity, Waitlist taken, Waitlist remaining")
-            for course in courses:
-                print(course.registration_info)
+            if debug:
+                print("[Seats capacity, Seats taken, Seats available, Waitlist capacity, Waitlist taken, Waitlist remaining")
+                for course in courses:
+                    print(course.registration_info)
             raise KeyboardInterrupt()
         except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
             # Internet connection or timeout error
@@ -78,12 +78,12 @@ def loop_check_courses(courses,
             sys.exit(1)
         
 
-
+debug_mode = True
 # CRNS variable imported from sensitive_info.py
 sleep_time_between_course_initialization = 1.0 # Must be float value, "*.***"
 courses = make_courses(CRNS,
                        sleep_time_between_course_initialization,
-                       debug=True)
+                       debug_mode)
 # Sleep times in seconds (same as above, must be floats)
 sleep_time_between_courses = 1.0
 sleep_time_between_each_ping = 5.0
@@ -92,4 +92,4 @@ loop_check_courses(courses,
                    sleep_time_between_courses,
                    sleep_time_between_each_ping,
                    sleep_time_between_error,
-                   debug=True)
+                   debug_mode)
