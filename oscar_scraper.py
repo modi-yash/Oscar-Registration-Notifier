@@ -19,7 +19,7 @@ def make_courses(crn_list, sleep_time_between_course_initialization: float = 1.0
                     course = Course(crn, session)
                     all_courses_list.append(course)
                     # Prints all seats
-                    if debug: log(f"{course.registration_info} - {course.url}")
+                    if debug: log(f"{course.__str__()} - {course.registration_info}")
                     break  # Success, exit retry loop
                 except (requests.exceptions.ConnectionError, requests.exceptions.Timeout) as e:
                     num_tries += 1
@@ -57,8 +57,6 @@ def loop_check_courses(courses,
                         })
                         course.has_notified = True
                         log(f"Notification provided: \"Registration for {course.course_title} has changed and IS NOT full.\"")
-                        # Ends the process (for now)
-                        raise Exception("It works.")
                 time.sleep(sleep_time_between_courses)
             time.sleep(sleep_time_between_each_ping)
         except KeyboardInterrupt as e:
@@ -66,7 +64,7 @@ def loop_check_courses(courses,
             if debug:
                 log("[Seats capacity, Seats taken, Seats available, Waitlist capacity, Waitlist taken, Waitlist remaining]")
                 for course in courses:
-                    log(f"{course.registration_info} - {course.url}")
+                    log(f"{course.__str__()} - {course.registration_info}")
             raise KeyboardInterrupt()
         except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
             # Internet connection or timeout error
