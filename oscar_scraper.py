@@ -43,7 +43,7 @@ while(True):
                 "message": f"Registration for {course.course_title} has changed and IS NOT full."
                 })
                 course.has_notified = True
-                log(f"Notification provided: \"Registration for {course.course_title} has changed and IS NOT full.\"")
+                print(log(f"Notification provided: \"Registration for {course.course_title} has changed and IS NOT full.\""))
                 raise Exception("It works.")
         time.sleep(1)
     time.sleep(5)

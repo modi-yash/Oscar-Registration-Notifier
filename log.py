@@ -6,4 +6,7 @@ def log(*text):
     if not os.path.isdir("./logs"):
         os.mkdir("logs")
     with open(f"./logs/{datetime.datetime.now().strftime("%d-%m-%y")}_log.txt", 'a') as f:
-        f.write(f"{datetime.datetime.now()} - {text}\n")
+        message = f"{datetime.datetime.now()} - {text}\n"
+        f.write(message)
+        return message
+    return "Error with file handler."
