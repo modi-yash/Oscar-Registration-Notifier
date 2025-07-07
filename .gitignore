@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 logs/*_log.txt
+!logs/example_log.txt
 
 # C extensions
 *.so
