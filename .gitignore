@@ -3,8 +3,8 @@ __pycache__/
 *.py[cod]
 
 # Log files
-logs/*_log.txt
-!logs/example_log.txt
+logs/*.log
+!logs/example.log
 
 # C extensions
 *.so

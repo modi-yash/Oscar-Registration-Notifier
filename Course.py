@@ -26,7 +26,7 @@ class Course:
     def fetch_course_data(self):
         # Make a GET request to the URL
         try:
-            response = self.session.get(self.url)
+            response = self.session.get(self.url, timeout=10)
             # Check if the request was successful
             # If the request was successful, parse the HTML content
             if response.status_code == 200:
@@ -54,16 +54,19 @@ class Course:
         # Error handling for connection issues
         except requests.exceptions.ConnectionError as e:
             log("Connection error. Please check your internet connection,", e)
+            return
         except requests.exceptions.Timeout as e:
             log("Connection timed out. Please check your internet connection,", e)
+            return
         except requests.exceptions.RequestException as e:
             log("An error occurred while making the request:", e)
+            return
 
     def update_num_available(self, html=None) -> int:
         try:
             # Finds html code if it is not inputted
             if html is None:
-                response = self.session.get(self.url)
+                response = self.session.get(self.url, timeout=10)
                 if response.status_code == 200:
                     html = response.content
                 # Error handling for response

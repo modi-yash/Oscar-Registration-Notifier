@@ -7,11 +7,11 @@ import sys
 
 # Puts all courses into a list
 def make_courses(crn_list, sleep_time_between_course_initialization: float = 1.0, debug: bool = False):
-    if debug: print("[Seats capacity, Seats taken, Seats available, Waitlist capacity, Waitlist taken, Waitlist remaining")
     all_courses_list = []
     with requests.Session() as session:
         session.headers.update({'user-agent': USER_AGENT})
         # Creates couses
+        if debug: log("[Seats capacity, Seats taken, Seats available, Waitlist capacity, Waitlist taken, Waitlist remaining]")
         for crn in crn_list:
             num_tries = 0
             while num_tries < 3:
@@ -19,7 +19,7 @@ def make_courses(crn_list, sleep_time_between_course_initialization: float = 1.0
                     course = Course(crn, session)
                     all_courses_list.append(course)
                     # Prints all seats
-                    if debug: print(course.registration_info)
+                    if debug: log(f"{course.registration_info} - {course.url}")
                     break  # Success, exit retry loop
                 except (requests.exceptions.ConnectionError, requests.exceptions.Timeout) as e:
                     num_tries += 1
@@ -64,9 +64,9 @@ def loop_check_courses(courses,
         except KeyboardInterrupt as e:
             # Exiting the program
             if debug:
-                print("[Seats capacity, Seats taken, Seats available, Waitlist capacity, Waitlist taken, Waitlist remaining")
+                log("[Seats capacity, Seats taken, Seats available, Waitlist capacity, Waitlist taken, Waitlist remaining]")
                 for course in courses:
-                    print(course.registration_info)
+                    log(f"{course.registration_info} - {course.url}")
             raise KeyboardInterrupt()
         except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
             # Internet connection or timeout error
