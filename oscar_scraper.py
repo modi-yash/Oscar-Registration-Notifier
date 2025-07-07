@@ -31,30 +31,34 @@ def make_courses():
         log("Finished fetching data for all CRNs. Starting looping.")
         return all_courses_list
 
+def loop_check_courses(courses, sleep_time_between_courses: int = 1, sleep_time_between_each_ping: int = 5, sleep_time_between_error: int = 30):
+    while(True):
+        try:
+            for course in courses:
+                # Checks if the open registration seats have increased and hasn't already notified
+                if(course.num_registered<course.update_num_registered()
+                and course.registration_info[0]!=course.registration_info[1]
+                and course.num_registered!=-404
+                and not course.has_notified):
+                        # Posts message to api
+                        r = requests.post("https://api.pushover.net/1/messages.json", data = {
+                        "token": API_KEY,
+                        "user": USER_KEY,
+                        "message": f"Registration for {course.course_title} has changed and IS NOT full."
+                        })
+                        course.has_notified = True
+                        log(f"Notification provided: \"Registration for {course.course_title} has changed and IS NOT full.\"")
+                        # Ends the process (for now)
+                        raise Exception("It works.")
+                time.sleep(sleep_time_between_courses)
+        except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
+            log(f"Connection timed out. Please check your internet connection.")
+            time.sleep(sleep_time_between_error)
+        except Exception as e:
+            log("Fatal error occurred:", e)
+            sys.exit(1)
+        time.sleep(sleep_time_between_each_ping)
+
+
 courses = make_courses()
-while(True):
-    try:
-        for course in courses:
-            # Checks if the open registration seats have increased and hasn't already notified
-            if(course.num_registered<course.update_num_registered()
-            and course.registration_info[0]!=course.registration_info[1]
-            and course.num_registered!=-404
-            and not course.has_notified):
-                    # Posts message to api
-                    r = requests.post("https://api.pushover.net/1/messages.json", data = {
-                    "token": API_KEY,
-                    "user": USER_KEY,
-                    "message": f"Registration for {course.course_title} has changed and IS NOT full."
-                    })
-                    course.has_notified = True
-                    log(f"Notification provided: \"Registration for {course.course_title} has changed and IS NOT full.\"")
-                    # Ends the process (for now)
-                    raise Exception("It works.")
-            time.sleep(1)
-    except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
-        log(f"Connection timed out. Please check your internet connection.")
-        time.sleep(30)
-    except Exception as e:
-        log("Fatal error occurred:", e)
-        sys.exit(1)
-    time.sleep(5)
+loop_check_courses(courses)
