@@ -31,7 +31,17 @@ with requests.Session() as session:
                 log(f"Error fetching data for CRN {crn}: {e}")
                 break
         time.sleep(1)  # Sleep for 1 second to avoid overwhelming the server
-    print("Finished fetching data for all CRNs.")
+    print("Finished fetching data for all CRNs. Starting looping.")
 
-# while(True):
-#     pass
+while(True):
+    for course in courses:
+        
+        if(course.num_registered!=course.update_num_registered() and course.registration_info[0]!=course.registration_info[1]
+            and course.num_registered!=-404): # checks if the registration seats have changed
+                r = requests.post("https://api.pushover.net/1/messages.json", data = {
+                "token": API_KEY,
+                "user": USER_KEY,
+                "message": f"Registration for {course.course_title} has changed and IS NOT full."
+                })
+                raise Exception("It works.")
+    time.sleep(1)

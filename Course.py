@@ -17,7 +17,8 @@ class Course:
         self.course_number = ""
         self.course_section = ""
         self.url = f"https://oscar.gatech.edu/pls/bprod/bwckschd.p_disp_detail_sched?term_in=202508&crn_in={self.course_crn}"
-        self.nums_registered = self.update_nums_registered()
+        self.num_registered = -404 # will change in update_num_registered call in fetch_course_data
+        self.registration_info = [] # same as above variable
         # Fetch course data when the object is created
         self.fetch_course_data()
 
@@ -29,20 +30,20 @@ class Course:
             # If the request was successful, parse the HTML content
             if response.status_code == 200:
                 html = response.content
-                self.update_nums_registered(html)
+                self.update_num_registered(html)
                 soup = BeautifulSoup(html, 'html.parser')
                 course_information = soup.find(class_='ddlabel', scope="row")
                 if course_information:
                     course_information = course_information.get_text(strip=True)
                     if " - " in course_information:
                         course_information = course_information.split(" - ")
-                        print(course_information)
+                        # print(course_information)
                         # Assuming the course title is the first part, department and number are the second, and section is the third
                         self.course_title = course_information[0]
                         self.course_department, self.course_number = course_information[2].split(" ")
                         self.course_section = course_information[3]
                     else:
-                        log("Course not found.")
+                        log("Error in parsing course information.")
             # Response not found
             elif response.status_code == 404:
                 log("Page not found (404). Please check the URL.")
@@ -51,13 +52,13 @@ class Course:
                 log(f"Failed to retrieve the page. Status code: {response.status_code}")
         # Error handling for connection issues
         except requests.exceptions.ConnectionError as e:
-            print("Connection error. Please check your internet connection,", e)
+            log("Connection error. Please check your internet connection,", e)
         except requests.exceptions.Timeout as e:
             log("Connection timed out. Please check your internet connection,", e)
         except requests.exceptions.RequestException as e:
             log("An error occurred while making the request:", e)
 
-    def update_nums_registered(self, html=None) -> int:
+    def update_num_registered(self, html=None) -> int:
         try:
             # Finds html code if it is not inputted
             if html is None:
@@ -75,8 +76,10 @@ class Course:
             # Example: Find the number of registered students (update selector as needed)
             table = soup.find('table', class_='datadisplaytable', summary='This layout table is used to present the seating numbers.')
             if isinstance(table, Tag):
-                self.nums_registered = list(map(lambda item: item.get_text(), (table.find_all('td', class_='dddefault'))))
-                return self.nums_registered[1]
+                # Finally found the numbers and puts them into an instance variable
+                self.registration_info = list(map(lambda item: item.get_text(), (table.find_all('td', class_='dddefault'))))
+                self.num_registered = self.registration_info[1]
+                return self.num_registered
             else:
                 log("Could not find the seating numbers table.")
             return -1
