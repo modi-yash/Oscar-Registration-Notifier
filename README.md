@@ -2,7 +2,9 @@
 On Pushover (https://pushover.net) you will need:
     an API Token,
     and a User Key.
+
 Python installed, 3.13 is what this is based on.
+
 CRNS of your courses that you want to take. These can be found on Oscar.
 
 # Directions
