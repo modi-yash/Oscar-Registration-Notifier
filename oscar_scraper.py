@@ -3,6 +3,7 @@ import requests, time
 from log import log
 from Course import *
 from sensitive_info import *
+import sys
 
 courses = []
 with requests.Session() as session:
@@ -29,21 +30,28 @@ with requests.Session() as session:
     print("Finished fetching data for all CRNs. Starting looping.")
 
 while(True):
-    for course in courses:
-        # Checks if the open registration seats have increased and hasn't already notified
-        if(course.num_registered<course.update_num_registered()
-           and course.registration_info[0]!=course.registration_info[1]
-           and course.num_registered!=-404
-           and not course.has_notified):
-                # Posts message to api
-                r = requests.post("https://api.pushover.net/1/messages.json", data = {
-                "token": API_KEY,
-                "user": USER_KEY,
-                "message": f"Registration for {course.course_title} has changed and IS NOT full."
-                })
-                course.has_notified = True
-                print(log(f"Notification provided: \"Registration for {course.course_title} has changed and IS NOT full.\""))
-                # Ends the process (for now)
-                raise Exception("It works.")
-        time.sleep(1)
+    try:
+        for course in courses:
+            # Checks if the open registration seats have increased and hasn't already notified
+            if(course.num_registered<course.update_num_registered()
+            and course.registration_info[0]!=course.registration_info[1]
+            and course.num_registered!=-404
+            and not course.has_notified):
+                    # Posts message to api
+                    r = requests.post("https://api.pushover.net/1/messages.json", data = {
+                    "token": API_KEY,
+                    "user": USER_KEY,
+                    "message": f"Registration for {course.course_title} has changed and IS NOT full."
+                    })
+                    course.has_notified = True
+                    print(log(f"Notification provided: \"Registration for {course.course_title} has changed and IS NOT full.\""))
+                    # Ends the process (for now)
+                    raise Exception("It works.")
+            time.sleep(1)
+    except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
+        print(log(f"Connection timed out. Please check your internet connection."))
+        time.sleep(60)
+    except Exception as e:
+        print(log("Fatal error occurred:", e))
+        sys.exit(1)
     time.sleep(5)
