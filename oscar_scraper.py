@@ -32,7 +32,7 @@ def make_courses(crn_list, sleep_time_between_course_initialization: float = 1.0
                     log(f"Error fetching data for CRN {crn}: {e}")
                     break
             time.sleep(sleep_time_between_course_initialization)  # Sleep for 1 second to avoid overwhelming the server
-        log("Finished fetching data for all CRNs. Starting looping.")
+        print("Finished fetching data for all CRNs. Starting looping.")
         return all_courses_list
 
 def loop_check_courses(courses,

@@ -1,1 +1,1 @@
-mm-DD-YY HH:MM:SS - Finished fetching data for all CRNs. Starting looping.
+mm-DD-YY HH:MM:SS - Log Message
