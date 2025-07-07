@@ -6,6 +6,7 @@ from typing import Optional
 
 class Course:
     def __init__(self, crn: int, session: Optional[requests.Session] = None):
+        self.has_notified = False
         self.course_crn = crn
         if session is None:
             self.session = requests.Session()
