@@ -35,8 +35,10 @@ with requests.Session() as session:
 
 while(True):
     for course in courses:
+        # Checks if the open registration seats have increased and hasn't already notified
         if(course.num_registered<course.update_num_registered() and course.registration_info[0]!=course.registration_info[1]
-            and course.num_registered!=-404 and not course.has_notified): # checks if the registration seats have changed
+            and course.num_registered!=-404 and not course.has_notified):
+                # Posts message to api
                 r = requests.post("https://api.pushover.net/1/messages.json", data = {
                 "token": API_KEY,
                 "user": USER_KEY,
@@ -44,6 +46,7 @@ while(True):
                 })
                 course.has_notified = True
                 print(log(f"Notification provided: \"Registration for {course.course_title} has changed and IS NOT full.\""))
+                # Ends the process (for now)
                 raise Exception("It works.")
         time.sleep(1)
     time.sleep(5)
