@@ -31,7 +31,10 @@ def make_courses(crn_list):
         log("Finished fetching data for all CRNs. Starting looping.")
         return all_courses_list
 
-def loop_check_courses(courses, sleep_time_between_courses: int = 1, sleep_time_between_each_ping: int = 5, sleep_time_between_error: int = 30):
+def loop_check_courses(courses,
+                       sleep_time_between_courses: int = 1,
+                       sleep_time_between_each_ping: int = 5,
+                       sleep_time_between_error: int = 30):
     while(True):
         try:
             for course in courses:
