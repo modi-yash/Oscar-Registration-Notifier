@@ -39,9 +39,11 @@ def loop_check_courses(courses,
         try:
             for course in courses:
                 # Checks if the open registration seats have increased and hasn't already notified
-                if(course.num_registered<course.update_num_registered()
-                and course.registration_info[0]!=course.registration_info[1]
-                and course.num_registered!=-404
+                old_num_registered = course.num_registered
+                course.update_num_registered()
+                if(old_num_registered>course.num_registered # Registration slot has opened
+                and course.registration_info[0]!=course.registration_info[1] # Registration is not max
+                and course.num_registered!=-404 # Not first time checking
                 and not course.has_notified):
                         # Posts message to api
                         r = requests.post("https://api.pushover.net/1/messages.json", data = {
