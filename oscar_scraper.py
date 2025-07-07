@@ -1,8 +1,3 @@
-# First, install Python
-# In your terminal, type "python -m  pip", press enter
-# then type "pip install -r requirements.txt", press enter
-# Pushover API Key - IF YOU ARE USING THIS, YOU NEED A PUSHOVER API KEY
-
 # Required libraries
 import requests, time
 from log import log
