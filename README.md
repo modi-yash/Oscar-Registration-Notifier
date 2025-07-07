@@ -1,5 +1,5 @@
 # Requirements
-On Pushover (https://pushover.net) you will need:
+On Pushover (https://pushover.net):
     an API Token,
     and a User Key.
 
