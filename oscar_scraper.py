@@ -50,7 +50,7 @@ while(True):
             time.sleep(1)
     except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
         print(log(f"Connection timed out. Please check your internet connection."))
-        time.sleep(60)
+        time.sleep(30)
     except Exception as e:
         print(log("Fatal error occurred:", e))
         sys.exit(1)
