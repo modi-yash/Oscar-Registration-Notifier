@@ -1,3 +1,5 @@
+This is not at all endorsed by Georgia Tech, and use of this is of your own volition.
+
 # Requirements
 You will need:
 
