@@ -6,7 +6,7 @@ from sensitive_info import *
 import sys
 
 # Puts all courses into a list
-def make_courses(crn_list, sleep_time_between_course_initialization: float = 1.0, debug: bool = False):
+def make_courses(crn_list, sleep_time_between_course_initialization = 1.0, debug: bool = False):
     all_courses_list = []
     with requests.Session() as session:
         session.headers.update({'user-agent': USER_AGENT})
@@ -36,9 +36,9 @@ def make_courses(crn_list, sleep_time_between_course_initialization: float = 1.0
         return all_courses_list
 
 def loop_check_courses(courses,
-                       sleep_time_between_courses: float = 1.0,
-                       sleep_time_between_each_ping: float = 5.0,
-                       sleep_time_between_error: float = 30.0,
+                       sleep_time_between_courses = 1.0,
+                       sleep_time_between_each_ping = 5.0,
+                       sleep_time_between_error = 30.0,
                        debug: bool = False):
     while(True):
         try:
