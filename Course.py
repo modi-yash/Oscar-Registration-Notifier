@@ -80,9 +80,8 @@ class Course:
             # Example: Find the number of registered students (update selector as needed)
             table = soup.find('table', class_='datadisplaytable', summary='This layout table is used to present the seating numbers.')
             if isinstance(table, Tag):
-                # Finally found the numbers and puts them into an instance variable
-                self.registration_info = list(map(lambda item: item.get_text(), (table.find_all('td', class_='dddefault'))))
-                self.num_available = self.registration_info[2]
+                self.registration_info = [item.get_text() for item in table.find_all('td', class_='dddefault')]
+                self.num_available = int(self.registration_info[0]) - int(self.registration_info[1])
                 return self.num_available
             else:
                 log("Could not find the seating numbers table.")
