@@ -1,4 +1,4 @@
-from sensitive_info import *
+from sensitive_info import USER_AGENT
 from log import log
 import requests
 from bs4 import BeautifulSoup, Tag # type: ignore
