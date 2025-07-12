@@ -1,4 +1,4 @@
-This is not at all endorsed by Georgia Tech, and use of this is of your own volition.
+This is not at all endorsed by Georgia Tech, and use of this is of your own volition. All risks you take by using this app are not of the publisher's responsibility.
 
 # Requirements
 You will need:
